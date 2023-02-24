@@ -77,10 +77,13 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
     pid_motor_l->output = 190;
     control(pid_motor_l);
     control(pid_motor_r);
-    pid_motor_l->target = 110;
-    pid_motor_l->output = 110;
+    pid_motor_l->target = 150;
+    pid_motor_l->output = 150;
     control(pid_motor_l);
-    }
+    // pid_motor_l->target = 130;
+    // pid_motor_l->output = 130;
+    // control(pid_motor_l);
+  }
   if (digitalRead(right1) == HIGH && digitalRead(left1) == LOW)
   {
 
@@ -98,9 +101,12 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
     pid_motor_r->output = 190;
     control(pid_motor_l);
     control(pid_motor_r);
-    pid_motor_r->target = 110;
-    pid_motor_r->target = 110;
+    pid_motor_r->target = 150;
+    pid_motor_r->target = 150;
     control(pid_motor_r);
+    // pid_motor_r->target = 130;
+    // pid_motor_r->target = 130;
+    // control(pid_motor_r);
   }
 }
 

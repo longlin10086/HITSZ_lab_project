@@ -13,7 +13,7 @@
 #define encoder_A_2 3
 #define encoder_B_2 13
 #define period 20
-#define TARGET_BEGIN 65
+#define TARGET_BEGIN 64
 
 typedef struct PID
 {
