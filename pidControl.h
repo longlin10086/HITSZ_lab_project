@@ -4,7 +4,7 @@ float err_last;
 float err_last_last;
 float output;
 
-float void control(motor *Motor)
+void control(motor *Motor)
 {
   if (Motor->dir == 'l')
   {
@@ -62,30 +62,46 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
 
   if (digitalRead(left1) == HIGH && digitalRead(right1) == LOW)
   {
+
+    // pid_motor_r->target = TARGET_BEGIN / 2;
+    // pid_motor_r->output = TARGET_BEGIN / 2;
+    // pid_motor_l->target = TARGET_BEGIN / 2;
+    // pid_motor_l->output = TARGET_BEGIN / 2;
+    // control(pid_motor_l);
+    // control(pid_motor_r);
+    // delay(100);
+
     pid_motor_r->target = 0;
     pid_motor_r->output = 0;
-    pid_motor_l->target = TARGET_BEGIN;
-    pid_motor_l->output = TARGET_BEGIN;
-    while (digitalRead(left1) == HIGH)
-    {
-      control(pid_motor_l);
-      control(pid_motor_r);
+    pid_motor_l->target = 190;
+    pid_motor_l->output = 190;
+    control(pid_motor_l);
+    control(pid_motor_r);
+    pid_motor_l->target = 110;
+    pid_motor_l->output = 110;
+    control(pid_motor_l);
     }
-  }
   if (digitalRead(right1) == HIGH && digitalRead(left1) == LOW)
   {
+
+    // pid_motor_r->target = -TARGET_BEGIN / 2;
+    // pid_motor_r->output = -TARGET_BEGIN / 2;
+    // pid_motor_l->target = -TARGET_BEGIN / 2;
+    // pid_motor_l->output = -TARGET_BEGIN / 2;
+    // control(pid_motor_l);
+    // control(pid_motor_r);
+    // delay(100);
+
     pid_motor_l->target = 0;
     pid_motor_l->output = 0;
-    pid_motor_r->target = TARGET_BEGIN;
-    pid_motor_r->output = TARGET_BEGIN;
-    while (digitalRead(right1) == HIGH)
-    {
-      control(pid_motor_l);
-      control(pid_motor_r);
-    }
+    pid_motor_r->target = 190;
+    pid_motor_r->output = 190;
+    control(pid_motor_l);
+    control(pid_motor_r);
+    pid_motor_r->target = 110;
+    pid_motor_r->target = 110;
+    control(pid_motor_r);
   }
-  Serial.println("------------------------------------");
-  Serial.println(output);
 }
 
 //---------------------------------------------------------pid控制---------------------------------------------------------------------
