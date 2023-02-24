@@ -1,50 +1,10 @@
 #include "setup.h"
+float err;
+float err_last;
+float err_last_last;
+float output;
 
-//--------------------------------------------------------光电循迹-----------------------------------------------------------------
-void track(motor *pid_motor_l, motor *pid_motor_r)
-{
-
-  if (digitalRead(middle) == HIGH)
-  {
-    pid_motor_l->target = TARGET_BEGIN;
-    pid_motor_r->target = TARGET_BEGIN;
-  }
-  if (digitalRead(left1) == HIGH && digitalRead(right1) == LOW)
-  {
-    pid_motor_l->target *= 0;
-    pid_motor_r->target *= 1;
-  }
-  if (digitalRead(left2) == HIGH && digitalRead(right2) == LOW)
-  {
-    pid_motor_l->target = TARGET_BEGIN * 0.5;
-    pid_motor_r->target = TARGET_BEGIN * 0.6;
-  }
-  if (digitalRead(left3) == HIGH && digitalRead(right3) == LOW)
-  {
-    pid_motor_l->target = TARGET_BEGIN * 0.7;
-    pid_motor_r->target = TARGET_BEGIN * 0.8;
-  }
-
-  if (digitalRead(right3) == HIGH && digitalRead(left3) == LOW)
-  {
-    pid_motor_l->target = TARGET_BEGIN * 0.7;
-    pid_motor_r->target = TARGET_BEGIN * 0.8;
-  }
-  if (digitalRead(right2) == HIGH && digitalRead(left2) == LOW)
-  {
-    pid_motor_l->target = TARGET_BEGIN * 0.6;
-    pid_motor_r->target = TARGET_BEGIN * 0.5;
-  }
-  if (digitalRead(right1) == HIGH && digitalRead(left1) == LOW)
-  {
-    pid_motor_l->target *= 1;
-    pid_motor_r->target *= 0;
-  }
-  delay(100);
-}
-
-//---------------------------------------------------------pid控制---------------------------------------------------------------------
-void control(motor *Motor)
+float void control(motor *Motor)
 {
   if (Motor->dir == 'l')
   {
@@ -58,8 +18,6 @@ void control(motor *Motor)
       digitalWrite(IN1, LOW);
       digitalWrite(IN2, HIGH);
     }
-    Serial.println(Motor->output);
-    Serial.println("--------------------------------------------------------------");
     analogWrite(PWM_1, abs(Motor->output));
   }
   else
@@ -74,11 +32,63 @@ void control(motor *Motor)
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
     }
-    Serial.println(Motor->output);
-    Serial.println("****************************************************************");
     analogWrite(PWM_2, abs(Motor->output));
   }
 }
+//--------------------------------------------------------光电循迹-----------------------------------------------------------------
+void track(motor *pid_motor_l, motor *pid_motor_r)
+{
+  float kp = 0.07;
+  float ki = 0.65;
+  float kd = 0.0005;
+  float target = 0;
+
+  err_last_last = err_last;
+  err_last = err;
+  err = target - output;
+
+  if (digitalRead(left2) == HIGH)
+    err = err - 7.25;
+  if (digitalRead(left3) == HIGH)
+    err = err - 1.5;
+  if (digitalRead(right3) == HIGH)
+    err = err + 1.5;
+  if (digitalRead(right2) == HIGH)
+    err = err + 7.25;
+
+  output += kp * (err - err_last) + ki * err + kd * (err + err_last_last - 2 * err_last);
+  pid_motor_l->target = TARGET_BEGIN - 3.75 * output;
+  pid_motor_r->target = TARGET_BEGIN + 3.75 * output;
+
+  if (digitalRead(left1) == HIGH && digitalRead(right1) == LOW)
+  {
+    pid_motor_r->target = 0;
+    pid_motor_r->output = 0;
+    pid_motor_l->target = TARGET_BEGIN;
+    pid_motor_l->output = TARGET_BEGIN;
+    while (digitalRead(left1) == HIGH)
+    {
+      control(pid_motor_l);
+      control(pid_motor_r);
+    }
+  }
+  if (digitalRead(right1) == HIGH && digitalRead(left1) == LOW)
+  {
+    pid_motor_l->target = 0;
+    pid_motor_l->output = 0;
+    pid_motor_r->target = TARGET_BEGIN;
+    pid_motor_r->output = TARGET_BEGIN;
+    while (digitalRead(right1) == HIGH)
+    {
+      control(pid_motor_l);
+      control(pid_motor_r);
+    }
+  }
+  Serial.println("------------------------------------");
+  Serial.println(output);
+}
+
+//---------------------------------------------------------pid控制---------------------------------------------------------------------
 
 void pidControl(motor *Motor)
 {
@@ -102,8 +112,6 @@ void pidControl(motor *Motor)
 void set(motor *Motor)
 {
   Motor->v = (Motor->encoder / 780.0) * 3.1415 * 2.0 * (1000 / period);
-  Serial.println(Motor->v);
-  Serial.println(Motor->dir);
   Motor->err_last_last = Motor->err_last;
   Motor->err_last = Motor->err_now;
   Motor->err_now = Motor->target - Motor->output;

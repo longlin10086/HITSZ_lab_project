@@ -53,9 +53,9 @@ void pid_set_up()
 {
   motor *pid_motor_l = &Motor_L;
   motor *pid_motor_r = &Motor_R;
+  track(pid_motor_l, pid_motor_r);
   set(pid_motor_l);
   set(pid_motor_r);
-  track(pid_motor_l, pid_motor_r);
 }
 
 void setup()
@@ -103,21 +103,4 @@ void loop()
   // put your main code here, to run repeatedly:
   test_volt();
   delay(100);
-
-  // motor* Motor = &Motor_L;
-  /*Serial.print("now:");
-  Serial.print(Motor->err_now);
-  Serial.print("\r\n");
-   Serial.print("n-l:");
-  Serial.print(Motor->err_now-Motor->err_last);
-  Serial.print("\r\n");
-  Serial.print("output:");
-  Serial.print(Motor->output);
-  Serial.print("\r\n");
-  Serial.print("vol:");
-  Serial.print(Motor->v);
-  Serial.print("\r\n");
-  Serial.print("enc:");
-  Serial.print(Motor->encoder);
-  Serial.print("\r\n");*/
 }
