@@ -71,8 +71,8 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
     // control(pid_motor_r);
     // delay(100);
 
-    pid_motor_r->target = 0;
-    pid_motor_r->output = 0;
+    pid_motor_r->target = -190;
+    pid_motor_r->output = -190;
     pid_motor_l->target = 190;
     pid_motor_l->output = 190;
     control(pid_motor_l);
@@ -95,8 +95,8 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
     // control(pid_motor_r);
     // delay(100);
 
-    pid_motor_l->target = 0;
-    pid_motor_l->output = 0;
+    pid_motor_l->target = -190;
+    pid_motor_l->output = -190;
     pid_motor_r->target = 190;
     pid_motor_r->output = 190;
     control(pid_motor_l);
