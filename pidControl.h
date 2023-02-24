@@ -48,13 +48,13 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
   err = target - output;
 
   if (digitalRead(left2) == HIGH)
-    err = err - 7.25;
+    err = err - 7;
   if (digitalRead(left3) == HIGH)
     err = err - 1.5;
   if (digitalRead(right3) == HIGH)
     err = err + 1.5;
   if (digitalRead(right2) == HIGH)
-    err = err + 7.25;
+    err = err + 7;
 
   output += kp * (err - err_last) + ki * err + kd * (err + err_last_last - 2 * err_last);
   pid_motor_l->target = TARGET_BEGIN - 3.75 * output;
@@ -77,8 +77,8 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
     pid_motor_l->output = 190;
     control(pid_motor_l);
     control(pid_motor_r);
-    pid_motor_l->target = 150;
-    pid_motor_l->output = 150;
+    pid_motor_l->target = 145;
+    pid_motor_l->output = 145;
     control(pid_motor_l);
     // pid_motor_l->target = 130;
     // pid_motor_l->output = 130;
@@ -101,8 +101,8 @@ void track(motor *pid_motor_l, motor *pid_motor_r)
     pid_motor_r->output = 190;
     control(pid_motor_l);
     control(pid_motor_r);
-    pid_motor_r->target = 150;
-    pid_motor_r->target = 150;
+    pid_motor_r->target = 145;
+    pid_motor_r->target = 145;
     control(pid_motor_r);
     // pid_motor_r->target = 130;
     // pid_motor_r->target = 130;
