@@ -7,15 +7,13 @@
 #define IN3 6
 #define IN4 7
 
-
 //-----------pid-------------------------
 #define encoder_A_1 2
 #define encoder_B_1 8
 #define encoder_A_2 3
-#define encoder_B_2 9
+#define encoder_B_2 13
 #define period 20
-#define TARGET_BEGIN 200
-
+#define TARGET_BEGIN 80
 
 typedef struct PID
 {
@@ -30,17 +28,11 @@ typedef struct PID
     float target = TARGET_BEGIN;
 } motor;
 
-
-
 //-------------循迹----------------------
-#define left1 22
-#define left2 23
-#define left3 24
-#define middle 25
+#define left1 48
+#define left2 50
+#define left3 52
+#define middle 38
 #define right3 26
-#define right2 27
-#define right1 28
-
-
-
-
+#define right2 24
+#define right1 22
