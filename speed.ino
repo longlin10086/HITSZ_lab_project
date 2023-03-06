@@ -10,6 +10,9 @@ Servo servo_Z;
 motor Motor_L;
 motor Motor_R;
 
+wheel Wheel_l;
+wheel Wheel_r;
+
 //---------------------------------------------------------编码器---------------------------------------------------------------------
 void encoding_1()
 {
@@ -53,7 +56,9 @@ void pid_set_up()
 {
   motor *pid_motor_l = &Motor_L;
   motor *pid_motor_r = &Motor_R;
-  track(pid_motor_l, pid_motor_r);
+  wheel *wheel_l = &Wheel_l;
+  wheel *wheel_r = &Wheel_r;
+  track(pid_motor_l, pid_motor_r, wheel_l, wheel_r);
   set(pid_motor_l);
   set(pid_motor_r);
 }
@@ -103,4 +108,22 @@ void loop()
   // put your main code here, to run repeatedly:
   test_volt();
   delay(100);
+  motor *pid_motor_l = &Motor_L;
+  motor *pid_motor_r = &Motor_R;
+
+  // if (digitalRead(right2) == HIGH && digitalRead(right1) == HIGH && digitalRead(middle) == HIGH && digitalRead(left1) == HIGH && digitalRead(left2) == HIGH)
+  // {
+  //   pid_motor_l->target = -200;
+  //   pid_motor_l->output = -200;
+  //   pid_motor_r->target = 200;
+  //   pid_motor_r->output = 200;
+  //   delay(100);
+  //   digitalWrite(IN1, LOW);
+  //   digitalWrite(IN2, LOW);
+  //   digitalWrite(IN3, LOW);
+  //   digitalWrite(IN4, LOW);
+  //   servo_X.attach(SERVO_X);
+  //   servo_Z.attach(SERVO_Z);
+  //   setup_servo(&servo_X, &servo_Z);
+  // }
 }

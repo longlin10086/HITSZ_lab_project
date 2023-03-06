@@ -12,8 +12,8 @@
 #define encoder_B_1 8
 #define encoder_A_2 3
 #define encoder_B_2 13
-#define period 20
-#define TARGET_BEGIN 65
+#define period 15
+#define TARGET_BEGIN 180
 
 typedef struct PID
 {
@@ -27,6 +27,28 @@ typedef struct PID
     float output = 0;
     float target = TARGET_BEGIN;
 } motor;
+
+typedef struct Wheel
+{
+    float err;
+    float err_last;
+    float err_last_last;
+    float output = 1;
+    float target = 1;
+
+    void pid_setup(float kp, float ki, float kd)
+    {
+        err_last_last = err_last;
+        err_last = err;
+        err = target - output;
+
+        output += kp * (err - err_last) + ki * err + kd * (err + err_last_last - 2 * err_last);
+        if (output < 0.25)
+            output = 0.25;
+        if (output > 1.75)
+            output = 1.75;
+    }
+} wheel;
 
 //-------------循迹----------------------
 #define left1 48
